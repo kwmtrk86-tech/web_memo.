@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { Task, Priority } from '../types/task'
+import type { Task, Priority, TaskStatus } from '../types/task'
 
 const STORAGE_KEY = 'task-manager-tasks'
 
@@ -13,22 +13,28 @@ export function useTasks() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
   }, [tasks])
 
-  const addTask = (title: string, description: string, priority: Priority, dueDate: string) => {
+  const addTask = (
+    title: string,
+    description: string,
+    priority: Priority,
+    dueDate: string,
+    status: TaskStatus,
+  ) => {
     const task: Task = {
       id: crypto.randomUUID(),
       title,
       description,
       priority,
       dueDate,
-      completed: false,
+      status,
       createdAt: new Date().toISOString(),
     }
     setTasks(prev => [task, ...prev])
   }
 
-  const toggleTask = (id: string) => {
+  const moveTask = (id: string, status: TaskStatus) => {
     setTasks(prev =>
-      prev.map(task => (task.id === id ? { ...task, completed: !task.completed } : task))
+      prev.map(task => (task.id === id ? { ...task, status } : task))
     )
   }
 
@@ -36,5 +42,5 @@ export function useTasks() {
     setTasks(prev => prev.filter(task => task.id !== id))
   }
 
-  return { tasks, addTask, toggleTask, deleteTask }
+  return { tasks, addTask, moveTask, deleteTask }
 }

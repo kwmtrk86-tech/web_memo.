@@ -1,5 +1,5 @@
 export type Priority = 'high' | 'medium' | 'low'
-export type Status = 'all' | 'active' | 'completed'
+export type TaskStatus = 'todo' | 'inprogress' | 'done'
 
 export interface Task {
   id: string
@@ -7,6 +7,12 @@ export interface Task {
   description: string
   priority: Priority
   dueDate: string
-  completed: boolean
+  status: TaskStatus
   createdAt: string
+}
+
+export interface ColumnDef {
+  id: TaskStatus
+  label: string
+  color: string
 }

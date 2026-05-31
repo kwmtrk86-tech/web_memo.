@@ -3,47 +3,34 @@ import type { Priority } from '../types/task'
 
 interface TaskFormProps {
   onAdd: (title: string, description: string, priority: Priority, dueDate: string) => void
+  onCancel: () => void
 }
 
-export function TaskForm({ onAdd }: TaskFormProps) {
+export function TaskForm({ onAdd, onCancel }: TaskFormProps) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [priority, setPriority] = useState<Priority>('medium')
   const [dueDate, setDueDate] = useState('')
-  const [open, setOpen] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
     onAdd(title.trim(), description.trim(), priority, dueDate)
-    setTitle('')
-    setDescription('')
-    setPriority('medium')
-    setDueDate('')
-    setOpen(false)
-  }
-
-  if (!open) {
-    return (
-      <button className="btn btn-primary add-btn" onClick={() => setOpen(true)}>
-        + タスクを追加
-      </button>
-    )
   }
 
   return (
-    <form className="task-form" onSubmit={handleSubmit}>
+    <form className="card-form" onSubmit={handleSubmit}>
       <input
-        className="input"
+        className="form-input"
         type="text"
-        placeholder="タスク名 *"
+        placeholder="タスク名"
         value={title}
         onChange={e => setTitle(e.target.value)}
         autoFocus
         required
       />
       <textarea
-        className="input textarea"
+        className="form-input form-textarea"
         placeholder="説明（任意）"
         value={description}
         onChange={e => setDescription(e.target.value)}
@@ -51,7 +38,7 @@ export function TaskForm({ onAdd }: TaskFormProps) {
       />
       <div className="form-row">
         <select
-          className="input select"
+          className="form-input form-select"
           value={priority}
           onChange={e => setPriority(e.target.value as Priority)}
         >
@@ -60,15 +47,17 @@ export function TaskForm({ onAdd }: TaskFormProps) {
           <option value="low">優先度: 低</option>
         </select>
         <input
-          className="input"
+          className="form-input"
           type="date"
           value={dueDate}
           onChange={e => setDueDate(e.target.value)}
         />
       </div>
       <div className="form-actions">
-        <button type="submit" className="btn btn-primary">追加</button>
-        <button type="button" className="btn btn-secondary" onClick={() => setOpen(false)}>キャンセル</button>
+        <button type="submit" className="btn-submit">追加</button>
+        <button type="button" className="btn-cancel-form" onClick={onCancel}>
+          キャンセル
+        </button>
       </div>
     </form>
   )
